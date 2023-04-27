@@ -25,10 +25,10 @@ class TRC20 extends TRX
         $this->decimals = $config['decimals'];
     }
 
-    public function balance(Address $address)
+    public function balance(Address $address, string $method = '/wallet/triggersmartcontract')
     {
         $format = Formatter::toAddressFormat($address->hexAddress);
-        $body = $this->_api->post('/wallet/triggersmartcontract', [
+        $body = $this->_api->post($method, [
             'contract_address' => $this->contractAddress->hexAddress,
             'function_selector' => 'balanceOf(address)',
             'parameter' => $format,
@@ -44,6 +44,7 @@ class TRC20 extends TRX
         } catch (InvalidArgumentException $e) {
             throw new TronErrorException($e->getMessage());
         }
+
         return $balance;
     }
 
